@@ -52,13 +52,27 @@ public class ReportGenerator {
 
 
         rankingReport.entrySet().stream().
-                sorted(Comparator.comparing(e -> e.getValue().getValue().negate())).forEach(entry -> {
+                sorted(getEntryComparator()).forEach(entry -> {
                     Tuple<BuySell, String> key = entry.getKey();
                     reportWriter.accept(key._1 + "\t" + key._2 + "\t" + entry.getValue().getValue());
                 }
         );
 
 
+    }
+
+    private Comparator<Map.Entry<ComparableTuple<BuySell, String>, MutableUSDValue>> getEntryComparator() {
+        return (o1, o2) -> {
+            BigDecimal value1 = o1.getValue().getValue();
+            BigDecimal value2 = o2.getValue().getValue();
+            int i = value2.compareTo(value1);
+            return i==0?o1.getKey()._1.compareTo(o2.getKey()._1):i;
+
+        };
+    }
+
+    private Function<Map.Entry<ComparableTuple<BuySell, String>, MutableUSDValue>, BigDecimal> getEntryBigDecimalFunction() {
+        return e -> e.getValue().getValue().negate();
     }
 
     private <T extends Comparable<? super T>> ComparableTuple<BuySell, T> createKey(Order order, Function<Order, T> f) {

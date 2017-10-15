@@ -1,0 +1,21 @@
+language: java
+install: true
+script: mvn package
+jdk:
+  - oraclejdk8
+cache:
+  directories:
+    - .autoconf
+    - $HOME/.m2
+deploy:
+  provider: releases
+  skip_cleanup: true
+  api_key:
+      secure: "$GITHUB_DEPLOY_TOKEN"
+  file:
+     $TRAVIS_BUILD_DIR/core/target/trading.jar
+  on:
+    tags: true
+
+notifications:
+  email: false
