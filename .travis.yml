@@ -13,7 +13,7 @@ deploy:
   api_key:
       secure: "$GITHUB_DEPLOY_TOKEN"
   file:
-     $TRAVIS_BUILD_DIR/core/target/trading.jar
+     $TRAVIS_BUILD_DIR/target/trading.jar
   on:
     tags: true
 
